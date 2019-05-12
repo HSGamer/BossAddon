@@ -1,0 +1,7 @@
+name: BossAddon
+version: ${project.version}
+main: me.hsgamer.bossaddon.BossAddon
+api-version: 1.13
+depend: [Boss]
+authors: [HSGamer]
+description: Addon for Boss
