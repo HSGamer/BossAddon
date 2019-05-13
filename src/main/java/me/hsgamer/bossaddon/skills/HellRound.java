@@ -1,5 +1,7 @@
 package me.hsgamer.bossaddon.skills;
 
+import me.hsgamer.bossaddon.utils.UMaterial;
+import me.hsgamer.bossaddon.utils.Utils;
 import org.bukkit.Particle;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -8,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.mineacademy.boss.api.BossSkill;
 import org.mineacademy.boss.api.BossSkillDelay;
 import org.mineacademy.boss.api.SpawnedBoss;
-import org.mineacademy.designer.model.ItemCreator;
-import org.mineacademy.remain.model.CompMaterial;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,13 +26,13 @@ public class HellRound extends BossSkill {
 
     @Override
     public ItemStack getIcon() {
-        return ItemCreator.of(
-                CompMaterial.BLAZE_ROD,
+        return Utils.createItemStack(
+                UMaterial.BLAZE_ROD.getMaterial(),
                 "Hell Round",
                 "",
                 "Create a square zone that",
                 "damages the entity in it"
-        ).build().make();
+        );
     }
 
     @Override

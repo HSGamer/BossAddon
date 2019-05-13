@@ -4,4 +4,4 @@ main: me.hsgamer.bossaddon.BossAddon
 api-version: 1.13
 depend: [Boss]
 authors: [HSGamer]
-description: Addon for Boss
+description: Some addition to Boss
