@@ -2,6 +2,7 @@ package me.hsgamer.bossaddon;
 
 import me.hsgamer.bossaddon.skills.FreezeTime;
 import me.hsgamer.bossaddon.skills.HellRound;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mineacademy.boss.api.BossSkillRegistry;
 
@@ -16,6 +17,7 @@ public final class BossAddon extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerSkill();
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "boss reload");
     }
 
     private void registerSkill() {

@@ -25,6 +25,7 @@ public class FreezeTime extends BossSkill {
     private int frequency;
     private static HashMap<Entity, Vector> vector = new HashMap<>();
     private static HashMap<UUID, BukkitTask> tasks = new HashMap<>();
+    private boolean async;
 
     @Override
     public String getName() {
@@ -59,6 +60,7 @@ public class FreezeTime extends BossSkill {
         radius = (int) map.getOrDefault("Radius", 5);
         time = (int) map.getOrDefault("Time", 200);
         frequency = (int) map.getOrDefault("Frequency", 10);
+        async = (boolean) map.getOrDefault("Async", false);
     }
 
     @Override
@@ -68,6 +70,7 @@ public class FreezeTime extends BossSkill {
         map.put("Radius", radius);
         map.put("Time", time);
         map.put("Frequency", frequency);
+        map.put("Async", async);
 
         return map;
     }
@@ -75,9 +78,10 @@ public class FreezeTime extends BossSkill {
     @Override
     public String[] getDefaultHeader() {
         return new String[] {
-                "  Time - How long are the projectiles freezing (in tick) ?",
+                "  Time - How long are the projectiles freezing (ticks) ?",
                 "  Radius - The radius of the zone",
-                "  Frequency - How frequently does the skill check for projectiles (in tick) ?",
+                "  Frequency - How frequently does the skill check for projectiles (ticks) ?",
+                "  Async - Whether or not the skill checks for projectiles asynchronous (experimental)",
         };
     }
 
@@ -86,7 +90,7 @@ public class FreezeTime extends BossSkill {
         Entity entity = spawnedBoss.getEntity();
         Location loc = entity.getLocation();
         List<Entity> entities = new ArrayList<>();
-        tasks.put(entity.getUniqueId(), (new BukkitRunnable() {
+        BukkitRunnable runnable = new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -103,8 +107,8 @@ public class FreezeTime extends BossSkill {
                     }
                 }
             }
-        }).runTaskTimer(BossAddon.getInstance(), frequency, frequency));
-        new BukkitRunnable() {
+        };
+        BukkitRunnable stopper = new BukkitRunnable() {
 
             @Override
             public void run() {
@@ -115,7 +119,18 @@ public class FreezeTime extends BossSkill {
                     vector.remove(entity);
                 }
             }
-        }.runTaskLater(BossAddon.getInstance(), time);
+        };
+
+        BukkitTask task;
+        if (async) {
+            task = runnable.runTaskTimerAsynchronously(BossAddon.getInstance(), frequency, frequency);
+            stopper.runTaskLaterAsynchronously(BossAddon.getInstance(), time);
+        } else {
+            task = runnable.runTaskTimer(BossAddon.getInstance(), frequency, frequency);
+            stopper.runTaskLater(BossAddon.getInstance(), time);
+        }
+
+        tasks.put(entity.getUniqueId(), task);
         return true;
     }
 }
