@@ -57,7 +57,7 @@ public class FreezeTime extends BossSkill {
     @Override
     public void readSettings(Map<String, Object> map) {
         radius = (int) map.getOrDefault("Radius", 5);
-        time = (int) map.getOrDefault("Time", 10);
+        time = (int) map.getOrDefault("Time", 200);
         frequency = (int) map.getOrDefault("Frequency", 10);
     }
 
@@ -75,9 +75,9 @@ public class FreezeTime extends BossSkill {
     @Override
     public String[] getDefaultHeader() {
         return new String[] {
-                "  Time - How long are the projectiles freezing ?",
+                "  Time - How long are the projectiles freezing (in tick) ?",
                 "  Radius - The radius of the zone",
-                "  Frequency - How frequently does the skill check for projectiles ?",
+                "  Frequency - How frequently does the skill check for projectiles (in tick) ?",
         };
     }
 
